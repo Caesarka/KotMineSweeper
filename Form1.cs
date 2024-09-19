@@ -15,6 +15,7 @@ namespace KotMineSweeper
 		DateTime _startTime;
 		bool _isTimerStarted = false;
 		int _minesLeft = MINES;
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -40,13 +41,34 @@ namespace KotMineSweeper
 				for (int x = 0; x < SIZE; x++)
 				{
 					Button btn = new Button();
-					btn.Tag = (x, y);
+					btn.Tag = _cells[x, y];
+					_cells[x, y].button = btn;
 					btn.Width = btnSize;
 					btn.Height = btnSize;
 					btn.Left = x * btnSize + 5;
 					btn.Top = y * btnSize + menuStrip.Height + 15 + 40;
 					this.Controls.Add(btn);
+					btn.MouseDown += Btn_MouseClick;
 					btn.Click += Button_Click;
+				}
+			}
+		}
+
+		private void Btn_MouseClick(object? sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{
+				var btn = (Button?)sender;
+				CellData? data = (CellData)btn.Tag;
+				if (data.Flag == false) { data.Flag = true; }
+				else { data.Flag = false; }
+				if (data.Flag == false)
+				{
+					btn.Text = "";
+				}
+				else
+				{
+					btn.Text = "\uD83D\uDEA9";
 				}
 			}
 		}
@@ -73,20 +95,32 @@ namespace KotMineSweeper
 			return binaryValues;
 		}
 
-		public void Button_Click(object sender, EventArgs e)
+		public void Button_Click(object? sender, EventArgs e)
 		{
-			
 			if (!_isTimerStarted)
 			{
 				_startTime = DateTime.Now;
 				_timer.Start();
 				_isTimerStarted = true;
 			}
+
 			Button clickedBtn = (Button)sender;
-			var index = ((int, int))clickedBtn.Tag;
-			var cellData = _cells[index.Item1, index.Item2];
+			var cellData = (CellData)clickedBtn.Tag;
 			clickedBtn.BackColor = cellData.Value ? Color.LightGray : Color.Red;
-			var neighbours = GetNeighbours(index);
+
+			if (clickedBtn.BackColor == Color.Red)
+			{
+				clickedBtn.BackgroundImage = Resources.bomb;
+				clickedBtn.BackgroundImageLayout = ImageLayout.Stretch;
+				clickedBtn.Refresh();
+				smileBtn.BackgroundImage = Resources.sad_smile;
+				smileBtn.BackgroundImageLayout = ImageLayout.Stretch;
+				smileBtn.Refresh();
+			}
+
+			clickedBtn.Enabled = false;
+			cellData.isOpen = true;
+			var neighbours = GetNeighbours(cellData);
 			
 			if (cellData.Value)
 			{
@@ -94,7 +128,13 @@ namespace KotMineSweeper
 				clickedBtn.Text = cntMine.ToString();
 				if (cntMine == 0)
 				{
-
+					foreach (var neighbour in neighbours)
+					{
+						if (!neighbour.isOpen)
+						{
+							Button_Click(neighbour.button, e);
+						}
+					}
 				}
 			}
 			else
@@ -112,12 +152,12 @@ namespace KotMineSweeper
 			}
 		}
 
-		public int CountMine(List<(int X, int Y)> neighbours)
+		public int CountMine(List<CellData> neighbours)
 		{
 			var count = 0;
 			foreach (var neighbour in neighbours)
 			{
-				if (_cells[neighbour.X, neighbour.Y].Value == false)
+				if (neighbour.Value == false)
 				{
 					count++;
 				}
@@ -125,26 +165,26 @@ namespace KotMineSweeper
 			return count;
 		}
 
-		public List<(int X, int Y)> GetNeighbours((int X, int Y) index)
+		public List<CellData> GetNeighbours(CellData cellData)
 		{
-			var neighbours = new List<(int X, int Y)>();
-			for (int x = index.X - 1; x <= index.X + 1; x++)
+			var neighbours = new List<CellData>();
+			for (int x = cellData.X - 1; x <= cellData.X + 1; x++)
 			{
-				for (int y = index.Y - 1; y <= index.Y + 1; y++)
+				for (int y = cellData.Y - 1; y <= cellData.Y + 1; y++)
 				{
 					if (x >= 0 && x < SIZE)
 					{
 						if (y >= 0 && y < SIZE)
 						{
-							if (x != index.X || y != index.Y)
+							if (x != cellData.X || y != cellData.Y)
 							{
-								neighbours.Add((x, y));
+								neighbours.Add(_cells[x, y]);
 							}
 						}
 					}
 				}
 			}
-			foreach ((int X, int Y) neighbour in neighbours)
+			foreach (var neighbour in neighbours)
 			{
 				Trace.WriteLine($"{neighbour.X}, {neighbour.Y}");
 			}

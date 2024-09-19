@@ -8,9 +8,12 @@ namespace KotMineSweeper
 {
 	public class CellData
 	{
-		int X;
-		int Y;
+		public int X;
+		public int Y;
 		public bool Value;
+		public bool Flag;
+		public Button button;
+		public bool isOpen;
 
 		public CellData(int x, int y)
 		{
