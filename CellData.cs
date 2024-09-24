@@ -12,8 +12,8 @@ namespace KotMineSweeper
 		public int Y;
 		public bool Value;
 		public bool Flag;
-		public Button button;
-		public bool isOpen;
+		public Button Button;
+		public bool IsOpen;
 
 		public CellData(int x, int y)
 		{

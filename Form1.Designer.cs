@@ -49,6 +49,7 @@
 			smileBtn = new Button();
 			lblTimer = new Label();
 			lblMinesLeft = new Label();
+			map = new Panel();
 			menuStrip.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
 			tableLayoutPanel1.SuspendLayout();
@@ -59,7 +60,7 @@
 			menuStrip.Items.AddRange(new ToolStripItem[] { gameToolStripMenuItem, helpToolStripMenuItem });
 			menuStrip.Location = new Point(0, 0);
 			menuStrip.Name = "menuStrip";
-			menuStrip.Size = new Size(191, 24);
+			menuStrip.Size = new Size(205, 24);
 			menuStrip.TabIndex = 0;
 			menuStrip.Text = "MenuStrip";
 			// 
@@ -161,15 +162,14 @@
 			tableLayoutPanel1.Name = "tableLayoutPanel1";
 			tableLayoutPanel1.RowCount = 1;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-			tableLayoutPanel1.Size = new Size(167, 40);
+			tableLayoutPanel1.Size = new Size(181, 40);
 			tableLayoutPanel1.TabIndex = 0;
-			tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
 			// 
 			// smileBtn
 			// 
 			smileBtn.BackgroundImage = (Image)resources.GetObject("smileBtn.BackgroundImage");
 			smileBtn.BackgroundImageLayout = ImageLayout.Zoom;
-			smileBtn.Location = new Point(65, 3);
+			smileBtn.Location = new Point(74, 3);
 			smileBtn.Name = "smileBtn";
 			smileBtn.Size = new Size(36, 34);
 			smileBtn.TabIndex = 0;
@@ -181,10 +181,11 @@
 			lblTimer.Anchor = AnchorStyles.Left | AnchorStyles.Right;
 			lblTimer.AutoSize = true;
 			lblTimer.BackColor = Color.Red;
-			lblTimer.Location = new Point(107, 12);
+			lblTimer.Location = new Point(121, 12);
 			lblTimer.Name = "lblTimer";
 			lblTimer.Size = new Size(57, 15);
 			lblTimer.TabIndex = 1;
+			lblTimer.Text = "0";
 			// 
 			// lblMinesLeft
 			// 
@@ -193,21 +194,28 @@
 			lblMinesLeft.BackColor = Color.Red;
 			lblMinesLeft.Location = new Point(3, 12);
 			lblMinesLeft.Name = "lblMinesLeft";
-			lblMinesLeft.Size = new Size(56, 15);
+			lblMinesLeft.Size = new Size(65, 15);
 			lblMinesLeft.TabIndex = 2;
-			lblMinesLeft.Click += lblMinesLeft_Click;
+			// 
+			// map
+			// 
+			map.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			map.Location = new Point(12, 84);
+			map.Name = "map";
+			map.Size = new Size(181, 183);
+			map.TabIndex = 1;
 			// 
 			// Form1
 			// 
 			AutoScaleMode = AutoScaleMode.None;
-			ClientSize = new Size(191, 268);
+			ClientSize = new Size(205, 279);
+			Controls.Add(map);
 			Controls.Add(tableLayoutPanel1);
 			Controls.Add(menuStrip);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			MainMenuStrip = menuStrip;
 			Name = "Form1";
 			Text = "KotMinesweeper";
-			Load += Form1_Load;
 			menuStrip.ResumeLayout(false);
 			menuStrip.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
@@ -238,5 +246,6 @@
 		private Button smileBtn;
 		private Label lblTimer;
 		private Label lblMinesLeft;
+		private Panel map;
 	}
 }
